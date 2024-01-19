@@ -1,21 +1,19 @@
+import 'package:blogged/shared/input_fields/input_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../providers.dart';
-import 'text_field_container.dart';
-
-class PasswordTextField extends StatefulWidget {
+class PasswordField extends StatefulWidget {
   final TextEditingController passwordController;
-  const PasswordTextField({
+  const PasswordField({
     super.key,
     required this.passwordController,
   });
 
   @override
-  State<PasswordTextField> createState() => _PasswordTextFieldState();
+  State<PasswordField> createState() => _PasswordFieldState();
 }
 
-class _PasswordTextFieldState extends State<PasswordTextField> {
+class _PasswordFieldState extends State<PasswordField> {
   @override
   void dispose() {
     widget.passwordController.dispose();
@@ -27,7 +25,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
     return TextFieldBorder(
       Consumer(
         builder: (context, ref, child) {
-          final isObcured = ref.watch(isObcuredProvider);
+          final isObcured = ref.watch(stateIsObscured);
           return TextField(
             controller: widget.passwordController,
             keyboardType: TextInputType.visiblePassword,
@@ -36,9 +34,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               hintText: 'Enter your password',
               suffixIcon: IconButton(
                 onPressed: () {
-                  ref
-                      .read(isObcuredProvider.notifier)
-                      .update((state) => !state);
+                  ref.read(stateIsObscured.notifier).update((state) => !state);
                 },
                 icon: Icon(isObcured
                     ? Icons.remove_red_eye_outlined
@@ -53,17 +49,16 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   }
 }
 
-class ConfirmPasswordTextField extends StatefulWidget {
+class ConfirmPasswordField extends StatefulWidget {
   final TextEditingController confirmPasswordController;
-  const ConfirmPasswordTextField(
+  const ConfirmPasswordField(
       {super.key, required this.confirmPasswordController});
 
   @override
-  State<ConfirmPasswordTextField> createState() =>
-      _ConfirmPasswordTextFieldState();
+  State<ConfirmPasswordField> createState() => _ConfirmPasswordFieldState();
 }
 
-class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
+class _ConfirmPasswordFieldState extends State<ConfirmPasswordField> {
   @override
   void dispose() {
     widget.confirmPasswordController.dispose();
@@ -75,7 +70,7 @@ class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
     return TextFieldBorder(
       Consumer(
         builder: (context, ref, child) {
-          final isObcured = ref.watch(isObcuredProvider);
+          final isObcured = ref.watch(stateIsObscured);
           return TextField(
             controller: widget.confirmPasswordController,
             keyboardType: TextInputType.visiblePassword,
@@ -84,9 +79,7 @@ class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
               hintText: 'Confirm Password',
               suffixIcon: IconButton(
                 onPressed: () {
-                  ref
-                      .read(isObcuredProvider.notifier)
-                      .update((state) => !state);
+                  ref.read(stateIsObscured.notifier).update((state) => !state);
                 },
                 icon: Icon(isObcured
                     ? Icons.remove_red_eye_outlined

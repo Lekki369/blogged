@@ -12,6 +12,14 @@ class ResponseData {
     required this.emailVerfied,
   });
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'token': token,
+      'uid': uid,
+      'emailVerfied': emailVerfied,
+    };
+  }
+
   factory ResponseData.fromMap(Map<String, dynamic> map) {
     return ResponseData(
       token: map['token'] as String,
@@ -22,4 +30,6 @@ class ResponseData {
 
   factory ResponseData.fromJson(String source) =>
       ResponseData.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  String toJson() => json.encode(toMap());
 }

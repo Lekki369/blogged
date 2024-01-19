@@ -1,8 +1,8 @@
-import 'package:blogged/sign_in_up_screens/sign_in_screen/sign_in.dart';
+import 'package:blogged/screens/sign_in_up_screens/sign_in_screen/sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../shared/input_fields/input_fields.dart';
+import '../../../shared/input_fields/input_fields.dart';
 import 'conponents/sign_up_button.dart';
 
 class SignUp extends StatelessWidget {
@@ -37,9 +37,9 @@ class SignUp extends StatelessWidget {
             SizedBox(height: 50.h),
             EmailTextField(emailController: emailController),
             SizedBox(height: 50.h),
-            PasswordTextField(passwordController: passwordController),
+            PasswordField(passwordController: passwordController),
             SizedBox(height: 50.h),
-            ConfirmPasswordTextField(
+            ConfirmPasswordField(
                 confirmPasswordController: confirmPasswordController),
             SizedBox(height: 50.h),
             SignUpButton(

@@ -1,11 +1,12 @@
-import 'package:blogged/constants.dart';
-import 'package:blogged/providers.dart';
+import 'package:blogged/screens/sign_in_up_screens/sign_in_screen/sign_in.dart';
+import 'package:blogged/screens/sign_in_up_screens/ui_helper.dart';
 import 'package:blogged/shared/controllers_managers.dart';
-import 'package:blogged/sign_in_up_screens/ui_helper.dart';
+import 'package:blogged/utils/constants.dart';
+import 'package:blogged/utils/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../shared/widgets.dart';
+import '../../../../shared/custom_snacknar_widgets.dart';
 
 class ForgotPasswordButton extends ConsumerWidget {
   final TextEditingController email;
@@ -13,8 +14,8 @@ class ForgotPasswordButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(isLoadingProvider);
-    final auth = ref.read(authProvider);
+    final isLoading = ref.watch(stateIsLoading);
+    final auth = ref.read(authenticationProvider);
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -24,7 +25,7 @@ class ForgotPasswordButton extends ConsumerWidget {
                 loading(ref);
 
                 if (!email.text.contains(RegExp('@'))) {
-                  snackBar(context, 'Add @something.com!!!');
+                  showCustomSnackBar(context, 'Add @something.com!!!');
                   loading(ref);
                   return;
                 }
@@ -37,19 +38,20 @@ class ForgotPasswordButton extends ConsumerWidget {
                 loading(ref);
                 switch (responseType) {
                   case ResponseType.success:
-                    snackBar(
+                    showCustomSnackBar(
                         context, 'Check your email for password reset link');
-                    //TODO: to loginscreen
-
-                    // disposeControllers(
-                    //     [userName, email, password, confirmPassword]);
-
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignIn(),
+                        ),
+                        (route) => false);
                     break;
                   case ResponseType.error:
-                    clearControllers([email]);
+                    clearTextControllers([email]);
                     break;
                   case ResponseType.noResponse:
-                    clearControllers([email]);
+                    clearTextControllers([email]);
                     break;
                 }
               },

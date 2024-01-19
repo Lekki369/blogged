@@ -1,11 +1,11 @@
-import 'package:blogged/providers.dart';
-import 'package:blogged/sign_in_up_screens/ui_helper.dart';
+import 'package:blogged/screens/home_screen/home_screen.dart';
+import 'package:blogged/screens/sign_in_up_screens/ui_helper.dart';
+import 'package:blogged/utils/constants.dart';
+import 'package:blogged/utils/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
-
-import '../../constants.dart';
 
 class OtpPinScreen extends StatelessWidget {
   const OtpPinScreen({super.key});
@@ -15,7 +15,7 @@ class OtpPinScreen extends StatelessWidget {
     PinTheme defaultTheme(WidgetRef ref) => PinTheme(
           textStyle: Theme.of(context).textTheme.displaySmall,
           decoration: BoxDecoration(
-            color: ref.watch(themeModeControllerProvider) == ThemeMode.light
+            color: ref.watch(themeModeController) == ThemeMode.light
                 ? Colors.green.shade100.withOpacity(.1)
                 : Colors.red.shade100.withOpacity(.1),
             shape: BoxShape.rectangle,
@@ -53,21 +53,28 @@ class OtpPinScreen extends StatelessWidget {
                         border: Border.all(color: Colors.red),
                       ),
                 ),
-                forceErrorState: ref.watch(pinPutHasErrorProvider),
+                forceErrorState: ref.watch(stateHasPinPutError),
                 errorText: 'Incorrect OTP',
                 errorTextStyle: Theme.of(context)
                     .textTheme
                     .bodyLarge
                     ?.copyWith(fontWeight: FontWeight.w500),
                 onCompleted: (otp) async {
-                  final auth = ref.read(authProvider);
+                  final auth = ref.read(authenticationProvider);
 
                   final otpResponse = await auth.confirmEmail(otp: otp);
                   if (otpResponse.containsKey(ResponseType.success)) {
-                    // TODO: homescreen
+                    UserNotifier(user: auth.user).writeUser();
+                    if (!context.mounted) return;
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                        (route) => false);
                   } else if (otpResponse.containsKey(ResponseType.error)) {
                     ref
-                        .read(pinPutHasErrorProvider.notifier)
+                        .read(stateHasPinPutError.notifier)
                         .update((state) => !state);
                   } else {
                     if (!context.mounted) return;

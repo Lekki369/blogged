@@ -23,16 +23,17 @@ class User {
       'email': email,
       'password': password,
       'dp': dp,
+      'responseData': responseData?.toMap()
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      username: map['username'] as String,
-      email: map['email'] as String,
-      password: map['password'] as String,
-      dp: map['dp'] as String,
-    );
+        username: map['username'],
+        email: map['email'],
+        password: map['password'],
+        dp: map['dp'],
+        responseData: ResponseData.fromMap(map['responseData']));
   }
 
   String toJson() => json.encode(toMap());
@@ -40,17 +41,18 @@ class User {
   factory User.fromJson(String source) =>
       User.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  User copyWith({
-    String? email,
-    String? username,
-    String? password,
-    String? dp,
-  }) {
+  User copyWith(
+      {String? email,
+      String? username,
+      String? password,
+      String? dp,
+      ResponseData? responseData}) {
     return User(
       email: email ?? this.email,
       username: username ?? this.username,
       password: password ?? this.password,
       dp: dp ?? this.dp,
+      responseData: responseData ?? this.responseData,
     );
   }
 }

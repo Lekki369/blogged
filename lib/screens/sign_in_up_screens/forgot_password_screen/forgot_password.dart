@@ -1,8 +1,8 @@
-import 'package:blogged/sign_in_up_screens/forgot_password_screen/components/forgot_password_button.dart';
+import 'package:blogged/screens/sign_in_up_screens/forgot_password_screen/components/forgot_password_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../shared/input_fields/username_email_field.dart';
+import '../../../shared/input_fields/username_email_field.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});

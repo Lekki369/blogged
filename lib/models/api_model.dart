@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 class Api {
-  final Dio _dio = Dio();
+  final Dio _dio =
+      Dio(BaseOptions(connectTimeout: const Duration(seconds: 20)));
 
   Future<Map<String, dynamic>?> signUp(String json) async {
     const url = 'https://agma-blogged.onrender.com/api/v1/users/auth/signup';

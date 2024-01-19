@@ -1,7 +1,7 @@
+import 'package:blogged/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-import '../models/auth_model.dart';
+import '../../models/auth_model.dart';
 import 'ui_helper.dart';
 
 class Otp {

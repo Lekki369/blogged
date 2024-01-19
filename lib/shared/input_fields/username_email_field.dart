@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'text_field_container.dart';
+import '../text_field_container.dart';
 
 class UserNameTextField extends StatefulWidget {
   final TextEditingController usernameController;

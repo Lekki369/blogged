@@ -1,10 +1,9 @@
-import 'package:blogged/constants.dart';
-
 import 'model.dart';
 
 class Authentication {
   final Api _api = Api();
   User _user = User();
+
   User get user => _user;
 
   Map<ResponseType, dynamic> parseResponseData(Map<String, dynamic>? response) {
@@ -15,6 +14,7 @@ class Authentication {
             response['response'],
           );
           _user.responseData = data;
+
           return {ResponseType.success: 'Successful'};
         } else {
           final status = response['status'];

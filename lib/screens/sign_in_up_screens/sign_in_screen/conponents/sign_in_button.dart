@@ -1,16 +1,17 @@
-import 'package:blogged/constants.dart';
-import 'package:blogged/providers.dart';
+import 'package:blogged/screens/home_screen/home_screen.dart';
+import 'package:blogged/screens/sign_in_up_screens/otp.dart';
+import 'package:blogged/screens/sign_in_up_screens/otp_pin_screen/otp_pin.dart';
+import 'package:blogged/screens/sign_in_up_screens/ui_helper.dart';
 import 'package:blogged/shared/controllers_managers.dart';
-import 'package:blogged/shared/widgets.dart';
-import 'package:blogged/sign_in_up_screens/otp.dart';
-import 'package:blogged/sign_in_up_screens/otp_pin_screen/otp_pin.dart';
-import 'package:blogged/sign_in_up_screens/ui_helper.dart';
+import 'package:blogged/shared/custom_snacknar_widgets.dart';
+import 'package:blogged/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignInButton extends ConsumerWidget {
   final TextEditingController email;
   final TextEditingController password;
+
   const SignInButton({
     super.key,
     required this.email,
@@ -19,8 +20,8 @@ class SignInButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(isLoadingProvider);
-    final auth = ref.read(authProvider);
+    final isLoading = ref.watch(stateIsLoading);
+    final auth = ref.read(authenticationProvider);
     return SizedBox(
         width: double.infinity,
         child: ElevatedButton(
@@ -30,18 +31,19 @@ class SignInButton extends ConsumerWidget {
               : () async {
                   loading(ref);
                   if (email.text.isEmpty || password.text.isEmpty) {
-                    snackBar(context, 'Fill all field!!!');
+                    showCustomSnackBar(context, 'Fill all field!!!');
                     loading(ref);
                     return;
                   }
 
                   if (!email.text.contains(RegExp('@'))) {
-                    snackBar(context, 'Add @something.com!!!');
+                    showCustomSnackBar(context, 'Add @something.com!!!');
                     loading(ref);
                     return;
                   }
                   if (password.text.length <= 6) {
-                    snackBar(context, 'Password must be greater six!!!');
+                    showCustomSnackBar(
+                        context, 'Password must be greater six!!!');
                     loading(ref);
                     return;
                   }
@@ -52,28 +54,32 @@ class SignInButton extends ConsumerWidget {
 
                   switch (responseType) {
                     case ResponseType.success:
-                      // disposeControllers([email, password]);
                       if (auth.user.responseData?.emailVerfied != true) {
                         final getOtpResponse = await Otp.sendOTP(context, auth);
 
                         if (getOtpResponse == ResponseType.success) {
                           if (!context.mounted) return;
-
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const OtpPinScreen(),
                               ));
-                          // disposeControllers([email, password]);
                         }
                       }
-                      // TODO: homepage
+                      UserNotifier(user: auth.user).writeUser();
+                      if (!context.mounted) return;
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false);
                       break;
                     case ResponseType.error:
-                      clearControllers([email, password]);
+                      clearTextControllers([email, password]);
                       break;
                     case ResponseType.noResponse:
-                      clearControllers([email, password]);
+                      clearTextControllers([email, password]);
                       break;
                   }
                 },

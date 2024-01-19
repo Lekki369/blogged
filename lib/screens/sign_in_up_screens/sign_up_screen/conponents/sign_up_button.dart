@@ -1,9 +1,8 @@
-import 'package:blogged/constants.dart';
-import 'package:blogged/providers.dart';
+import 'package:blogged/screens/sign_in_up_screens/otp_pin_screen/otp_pin.dart';
+import 'package:blogged/screens/sign_in_up_screens/ui_helper.dart';
 import 'package:blogged/shared/controllers_managers.dart';
-import 'package:blogged/shared/widgets.dart';
-import 'package:blogged/sign_in_up_screens/otp_pin_screen/otp_pin.dart';
-import 'package:blogged/sign_in_up_screens/ui_helper.dart';
+import 'package:blogged/shared/custom_snacknar_widgets.dart';
+import 'package:blogged/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,8 +24,8 @@ class SignUpButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(isLoadingProvider);
-    final auth = ref.read(authProvider);
+    final isLoading = ref.watch(stateIsLoading);
+    final auth = ref.read(authenticationProvider);
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -39,30 +38,32 @@ class SignUpButton extends ConsumerWidget {
                     email.text.isEmpty ||
                     password.text.isEmpty ||
                     confirmPassword.text.isEmpty) {
-                  snackBar(context, 'Fill all field!!!');
+                  showCustomSnackBar(context, 'Fill all field!!!');
                   loading(ref);
                   return;
                 }
                 if (userName.text.length <= 3) {
-                  snackBar(context, 'Username must be greater three!!!');
+                  showCustomSnackBar(
+                      context, 'Username must be greater three!!!');
                   loading(ref);
                   return;
                 }
 
                 if (!email.text.contains(RegExp('@'))) {
-                  snackBar(context, 'Add @something.com!!!');
+                  showCustomSnackBar(context, 'Add @something.com!!!');
                   loading(ref);
                   return;
                 }
                 if (password.text.length <= 6 ||
                     confirmPassword.text.length <= 6) {
-                  snackBar(context, 'Password must be greater six!!!');
+                  showCustomSnackBar(
+                      context, 'Password must be greater six!!!');
                   loading(ref);
                   return;
                 }
                 if (password.text != confirmPassword.text ||
                     confirmPassword.text != password.text) {
-                  snackBar(context, 'Check password!!!');
+                  showCustomSnackBar(context, 'Check password!!!');
                   loading(ref);
                   return;
                 }
@@ -82,17 +83,15 @@ class SignUpButton extends ConsumerWidget {
                           MaterialPageRoute(
                             builder: (context) => const OtpPinScreen(),
                           ));
-                      // disposeControllers(
-                      //     [userName, email, password, confirmPassword]);
                     }
 
                     break;
                   case ResponseType.error:
-                    clearControllers(
+                    clearTextControllers(
                         [userName, email, password, confirmPassword]);
                     break;
                   case ResponseType.noResponse:
-                    clearControllers(
+                    clearTextControllers(
                         [userName, email, password, confirmPassword]);
                     break;
                 }

@@ -6,15 +6,15 @@ final shapeRoundedBorder =
 
 // In button_styles.dart
 final ButtonStyle buttonStyleDark = ButtonStyle(
-  shape: MaterialStateProperty.all(shapeRoundedBorder),
-  textStyle: MaterialStateProperty.all(
+  shape: WidgetStateProperty.all(shapeRoundedBorder),
+  textStyle: WidgetStateProperty.all(
     Typography.whiteCupertino.bodyLarge!,
   ),
 );
 
 final ButtonStyle buttonStyleLight = ButtonStyle(
-  shape: MaterialStateProperty.all(shapeRoundedBorder),
-  textStyle: MaterialStateProperty.all(
+  shape: WidgetStateProperty.all(shapeRoundedBorder),
+  textStyle: WidgetStateProperty.all(
     Typography.blackCupertino.bodyLarge!,
   ),
 );

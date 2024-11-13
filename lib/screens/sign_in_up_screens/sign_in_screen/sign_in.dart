@@ -78,7 +78,7 @@ class SignIn extends StatelessWidget {
                     );
                   },
                   style: Theme.of(context).textButtonTheme.style?.copyWith(
-                      textStyle: const MaterialStatePropertyAll(
+                      textStyle: const WidgetStatePropertyAll(
                           TextStyle(fontWeight: FontWeight.w800))),
                   child: const Text(
                     'Register Now',
